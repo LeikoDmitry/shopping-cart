@@ -1,0 +1,22 @@
+{# Шаблон продукта #}
+
+{% extends '@layout/default.html.twig' %}
+
+{% block title %}{{ product.getTitle() }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-7 order-md-2">
+        <h3>{{ product.getTitle() }}</h3>
+        <p class="lead">{{ product.getDescription() }}</p>
+        {% if product.getStock > 0 %}
+            <p><a href="{{ path('cart.add', {'slug': product.getSlug(), 'quantity': 1}) }}" class="btn btn-success">Добавить в корзину</a></p>
+        {% else %}
+            <p>Нет в наличии</p>
+        {% endif %}
+    </div>
+    <div class="col-md-5 order-md-1">
+        <img class="featurette-image img-fluid mx-auto" data-src="holder.js/500x500/auto" src="{{ asset('images/') }}{{ product.getImage() }}">
+    </div>
+</div>
+{% endblock %}

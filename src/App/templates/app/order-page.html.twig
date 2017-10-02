@@ -1,0 +1,125 @@
+{# Главная заказов #}
+
+{% extends '@layout/default.html.twig' %}
+
+{% block title %}Страница заказов{% endblock %}
+
+{% block content %}
+    <form method="post" action="{{ path('order.create') }}">
+        <div class="row">
+            <div class="col-md-8 order-md-1">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3>Ваши реквизиты</h3>
+                        <hr/>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input value="{% if oldInput.email is defined %}{{ oldInput.email }}{% endif %}" name="email" type="email" class="form-control {% if errors.email is defined %}is-invalid{% endif %}" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+                            <div class="invalid-feedback">
+                                {% if errors.email is defined %}
+                                    {% for item in errors.email %}
+                                        {{ item }}
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="Name">Name</label>
+                            <input value="{% if oldInput.name is defined %}{{ oldInput.name }}{% endif %}" name="name" class="form-control {% if errors.name is defined %}is-invalid{% endif %}" id="Name" placeholder="Name">
+                            <div class="invalid-feedback">
+                                {% if errors.name is defined %}
+                                    {% for item in errors.name %}
+                                        {{ item }}
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h3>Адрес отправителя</h3>
+                        <hr/>
+                        <div class="form-group">
+                            <label for="Address1">Address1</label>
+                            <input value="{% if oldInput.address1 is defined %}{{ oldInput.address1 }}{% endif %}" name="address1" class="form-control {% if errors.address1 is defined %}is-invalid{% endif %}" id="Address1" placeholder="Address1">
+                            <div class="invalid-feedback">
+                                {% if errors.address1 is defined %}
+                                    {% for item in errors.address1 %}
+                                        {{ item }}
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="Address2">Address2</label>
+                            <input value="{% if oldInput.address2 is defined %}{{ oldInput.address2 }}{% endif %}" name="address2" class="form-control {% if errors.address2 is defined %}is-invalid{% endif %}" id="Address2" placeholder="Address1">
+                            <div class="invalid-feedback">
+                                {% if errors.address2 is defined %}
+                                    {% for item in errors.address2 %}
+                                        {{ item }}
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="City">City</label>
+                            <input value="{% if oldInput.city is defined %}{{ oldInput.city }}{% endif %}" name="city" class="form-control {% if errors.city is defined %}is-invalid{% endif %}" id="City" placeholder="City">
+                            <div class="invalid-feedback">
+                                {% if errors.city is defined %}
+                                    {% for item in errors.city %}
+                                        {{ item }}
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="postal_code">Postal Code</label>
+                            <input value="{% if oldInput.postal_code is defined %}{{ oldInput.postal_code }}{% endif %}" name="postal_code" class="form-control {% if errors.postal_code is defined %}is-invalid{% endif %}" id="postal_code" placeholder="Postal Code">
+                            <div class="invalid-feedback">
+                                {% if errors.postal_code is defined %}
+                                    {% for item in errors.postal_code %}
+                                        {{ item }}
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h3>Оплата</h3>
+                <hr />
+                <div id="payment"></div>
+            </div>
+            <div class="col-md-4 order-md-2">
+                <h3>Данные заказа</h3>
+                <hr/>
+                <table class="table table-bordered table-striped table-responsive">
+                    <tr>
+                        <td>Название</td>
+                        <td>Цена</td>
+                    </tr>
+                    {% for item in product_cart %}
+                        <tr>
+                            <td>{{ item.getTitle }}</td>
+                            <td>{{ item.getQuantity }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                {% include '@layout/partial/cart_summary.html.twig' %}
+                <button type="submit" class="btn btn-primary">Оформить заказ</button>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+{% block javascript %}
+    <script src="https://js.braintreegateway.com/js/braintree-2.32.1.min.js"></script>
+    <script>
+        $.ajax({
+            url: '{{ path('braintree.token') }}',
+            type: 'get',
+            dataType: 'json'
+        }).done(function (data) {
+            braintree.setup(data.token, "dropin", {
+                container: "payment"
+            });
+        });
+</script>
+{% endblock %}

@@ -1,0 +1,26 @@
+{# Главная страница #}
+
+{% extends '@layout/default.html.twig' %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+    <div class="row">
+        {% for item in products %}
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <div class="card-header bg-transparent">
+                    <img class="card-img-top" data-src="holder.js/100px180/" src="{{ asset('images/') }}{{ item.getImage() }}" data-holder-rendered="true">
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title">{{ item.getTitle() }}</h4>
+                    <p class="card-text">{{ item.getDescription() }}</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{{ path('product', {'slug': item.getSlug()}) }}" class="btn btn-outline-info">{{ item.title }}</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

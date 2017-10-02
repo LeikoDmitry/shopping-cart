@@ -1,0 +1,14 @@
+<table class="table table-bordered table-striped table-responsive">
+    <tr class="bg-info">
+        <td>Общая сумма</td>
+        <td>${{ basket.getTotal | number_format(2) }}</td>
+    </tr>
+    <tr>
+        <td>Доставка</td>
+        <td>$5.00</td>
+    </tr>
+    <tr class="bg-success">
+        <td>Всего</td>
+        <td>${{ (basket.getTotal + 5.00) | number_format(2) }}</td>
+    </tr>
+</table>

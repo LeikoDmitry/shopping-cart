@@ -1,0 +1,54 @@
+{# Шаблон корзины #}
+
+{% extends '@layout/default.html.twig' %}
+
+{% block title %}Корзина{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-8 order-md-1">
+            {% if basket.itemCount %}
+                <table class="table table-bordered table-striped table-responsive">
+                    <thead>
+                    <tr>
+                        <th>Продукт</th>
+                        <th>Цена</th>
+                        <th>Количество</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in products_cart %}
+                            <tr>
+                                <td><a href="{{ path('product', {'slug': item.getSlug()}) }}">{{ item.getTitle }}</a></td>
+                                <td>${{ item.getPrice | number_format(2) }}</td>
+                                <td>
+                                    <form method="post" action="{{  path('cart.add', {'slug': item.getSlug(),'quantity': item.getQuantity }) }}">
+                                        <div class="form-row align-items-center">
+                                            <div class="col-sm-8">
+                                                <label class="sr-only" for="inlineFormInputName"></label>
+                                                <input required value="{{ item.getQuantity }}" name="quantity" type="number" min="1" step="1" class="form-control mb-2 mb-sm-0" id="inlineFormInputName" placeholder="">
+                                            </div>
+                                            <div class="col-auto">
+                                                <button type="submit" class="btn btn-primary">Обновить</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>Корзина пуста. <a href="{{ path('home') }}">Начать покупать.)</a></p>
+            {% endif %}
+        </div>
+        <div class="col-md-4 order-md-2">
+        {% if basket.itemCount %}
+            <h4>Сумма корзины</h4>
+            <hr />
+            {% include '@layout/partial/cart_summary.html.twig' %}
+            <a class="btn btn-secondary" href="{{ path('order.index') }}">Проверить</a>
+        {% endif %}
+        </div>
+    </div>
+{% endblock %}
